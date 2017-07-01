@@ -1,40 +1,20 @@
 package com.flopcode.dotstar.android;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import com.flask.colorpicker.ColorPickerView.WHEEL_TYPE;
-import com.flask.colorpicker.OnColorSelectedListener;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.flopcode.dotstar.android.parameters.Parameter;
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableMap;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Map;
 
-import static com.flopcode.dotstar.android.Index.getConnectionPrefs;
-import static com.flopcode.dotstar.android.Index.getDotStar;
 import static com.google.common.collect.Iterables.filter;
 
 /**
@@ -83,7 +63,6 @@ public class PresetDetailFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                            Bundle savedInstanceState) {
-
     ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.preset_detail, container, false);
     for (Map<String, String> parameters : mItem.parameters) {
       Parameter p = Parameters.get(parameters);

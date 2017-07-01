@@ -74,8 +74,7 @@ public class PresetDetailActivity extends AppCompatActivity {
       // Create the detail fragment and add it to the activity
       // using a fragment transaction.
       Bundle arguments = new Bundle();
-      arguments.putSerializable(PresetDetailFragment.ARG_ITEM_ID,
-        preset);
+      arguments.putSerializable(PresetDetailFragment.ARG_ITEM_ID, preset);
       PresetDetailFragment fragment = new PresetDetailFragment();
       fragment.setArguments(arguments);
       getSupportFragmentManager().beginTransaction()
