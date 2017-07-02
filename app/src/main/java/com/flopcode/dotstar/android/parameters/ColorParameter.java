@@ -11,6 +11,8 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.flopcode.dotstar.android.Application;
+import com.flopcode.dotstar.android.ColorConvert;
 import com.flopcode.dotstar.android.Index;
 import com.flopcode.dotstar.android.R;
 import com.google.common.collect.ImmutableMap;
@@ -18,22 +20,27 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.util.Map;
-
 import static com.flopcode.dotstar.android.Index.getConnectionPrefs;
 import static com.flopcode.dotstar.android.Index.getDotStar;
 
 @SuppressWarnings("unused")
 public class ColorParameter extends Parameter {
-  public ColorParameter(Map<String, String> params) {
-    super(params);
+  public ColorParameter(String presetName, String parameterName) {
+    super(presetName, parameterName);
   }
 
   @Override
-  public View createButton(LayoutInflater inflater, ViewGroup rootView, final Context context) {
-    final Button res = (Button) inflater.inflate(R.layout.preset_color_button, rootView, false);
-    res.setText(name);
-    res.setOnClickListener(new View.OnClickListener() {
+  public View createView(LayoutInflater inflater, ViewGroup rootView, final Context context) {
+    final Button button = (Button) inflater.inflate(R.layout.preset_color_button, rootView, false);
+    onCreate(new Listener() {
+      @Override
+      public void onChange(String name, String value) {
+        button.setBackgroundColor(ColorConvert.convertColorFromServerToAndroid(value));
+      }
+    });
+
+    button.setText(getParameterName());
+    button.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         showColorPicker();
@@ -42,33 +49,31 @@ public class ColorParameter extends Parameter {
       private void showColorPicker() {
         ColorPickerDialogBuilder
           .with(context)
-          .setTitle("Choose color for " + name)
-          .initialColor(0xffffffff)
+          .setTitle("Choose color for " + getParameterName())
+          .initialColor(ColorConvert
+            .convertColorFromServerToAndroid(getValue()))
           .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
           .showAlphaSlider(false)
           .density(30)
           .setOnColorSelectedListener(new OnColorSelectedListener() {
             @Override
-            public void onColorSelected(int selectedColor) {
-
-              Call<Void> call = getDotStar(getConnectionPrefs(context)).set(ImmutableMap.of(name, color2String(selectedColor)));
+            public void onColorSelected(final int selectedColor) {
+              final String serverColor = ColorConvert.convertColorFromAndroid2String(selectedColor);
+              Call<Void> call = getDotStar(getConnectionPrefs(context)).set(ImmutableMap.of(getParameterName(), serverColor));
               call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
-                  Log.i(Index.LOG_TAG, "could set color for '" + name + "'");
+                  Log.i(Index.LOG_TAG, "could set color for '" + getParameterName() + "'");
+                  post(serverColor);
                 }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                  Log.e(Index.LOG_TAG, "could not set color for '" + name + "'", t);
+                  Log.e(Index.LOG_TAG, "could not set color for '" + getParameterName() + "'", t);
                 }
               });
             }
 
-            // color is always with full alpha (ff -> to Integer.toHexString always return 8 charachters.
-            private String color2String(int color) {
-              return "#" + Integer.toHexString(color).substring(2);
-            }
           })
           .setPositiveButton("ok", new ColorPickerClickListener() {
             @Override
@@ -86,6 +91,6 @@ public class ColorParameter extends Parameter {
           .show();
       }
     });
-    return res;
+    return button;
   }
 }

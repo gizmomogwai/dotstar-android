@@ -21,46 +21,48 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.util.Calendar;
-import java.util.Map;
-
 import static com.flopcode.dotstar.android.Index.getConnectionPrefs;
 import static com.flopcode.dotstar.android.Index.getDotStar;
 
 @SuppressWarnings("unused")
 public class TimeOfDayParameter extends Parameter {
-  public TimeOfDayParameter(Map<String, String> params) {
-    super(params);
+  public static final String PARAMETER_NAME = "parameterName";
+  public static final String PRESET_NAME = "presetName";
+  private Button mButton;
+  private Alarm mAlarm;
+
+  public TimeOfDayParameter(String presetName, String parameterName) {
+    super(presetName, parameterName);
   }
 
   public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-      // Use the current time as the default values for the picker
-      final Calendar c = Calendar.getInstance();
-      int hour = c.get(Calendar.HOUR_OF_DAY);
-      int minute = c.get(Calendar.MINUTE);
-
       // Create a new instance of TimePickerDialog and return it
-      return new TimePickerDialog(getActivity(), this, hour, minute,
+      return new TimePickerDialog(getActivity(),
+        this,
+        getArguments().getInt("hour"),
+        getArguments().getInt("minute"),
         DateFormat.is24HourFormat(getActivity()));
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-      // Do something with the time chosen by the user
-      final String name = getArguments().getString("name");
+      final String presetName = getArguments().getString(PRESET_NAME);
+      final String parameterName = getArguments().getString(PARAMETER_NAME);
+      final String tod = formatTimeOfDay(hourOfDay, minute);
       Call<Void> call = getDotStar(getConnectionPrefs(getActivity()))
-        .set(ImmutableMap.of(name, formatTimeOfDay(hourOfDay, minute)));
+        .set(ImmutableMap.of(parameterName, tod));
       call.enqueue(new Callback<Void>() {
         @Override
         public void onResponse(Call<Void> call, Response<Void> response) {
-          Log.i(Index.LOG_TAG, "could set timeOfDay for '" + name + "'");
+          Log.i(Index.LOG_TAG, "could set timeOfDay for '" + parameterName + "'");
+          staticPost(presetName, parameterName, tod);
         }
 
         @Override
         public void onFailure(Call<Void> call, Throwable t) {
-          Log.e(Index.LOG_TAG, "could not set timeOfDay for '" + name + "'", t);
+          Log.e(Index.LOG_TAG, "could not set timeOfDay for '" + parameterName + "'", t);
         }
       });
 
@@ -69,27 +71,57 @@ public class TimeOfDayParameter extends Parameter {
     private String formatTimeOfDay(int hourOfDay, int minute) {
       return String.format("%02d:%02d:00", hourOfDay, minute);
     }
+
+  }
+
+  private static class Alarm {
+    public final int hour;
+    public final int minute;
+
+    public Alarm(String s) {
+      String[] parts = s.split(":");
+      hour = Integer.parseInt(parts[0]);
+      minute = Integer.parseInt(parts[1]);
+    }
+
+    @Override
+    public String toString() {
+      return String.format("%02d:%02d", hour, minute);
+    }
   }
 
   @Override
-  public View createButton(LayoutInflater inflater, ViewGroup rootView, final Context context) {
-    final Button res = (Button) inflater.inflate(R.layout.preset_color_button, rootView, false);
-    res.setText(name);
-    res.setOnClickListener(new View.OnClickListener() {
+  public View createView(LayoutInflater inflater, ViewGroup rootView, final Context context) {
+    mButton = (Button) inflater.inflate(R.layout.preset_color_button, rootView, false);
+    onCreate(new Listener() {
+      @Override
+      public void onChange(String name, String value) {
+        mButton.setText(getLabel(name, new Alarm(value)));
+      }
+    });
+    mButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         showColorPicker();
       }
 
       private void showColorPicker() {
-        DialogFragment newFragment = new TimePickerFragment();
+        TimePickerFragment newFragment = new TimePickerFragment();
+        Alarm alarm = new Alarm(getValue());
         Bundle args = new Bundle();
-        args.putString("name", name);
+        args.putString(PRESET_NAME, getPresetName());
+        args.putString(PARAMETER_NAME, getParameterName());
+        args.putInt("hour", alarm.hour);
+        args.putInt("minute", alarm.minute);
         newFragment.setArguments(args);
         FragmentManager fm = ((FragmentActivity) context).getFragmentManager();
         newFragment.show(fm, "timePicker");
       }
     });
-    return res;
+    return mButton;
+  }
+
+  static String getLabel(String name, Alarm alarm) {
+    return String.format("%s: %s", name, alarm.toString());
   }
 }

@@ -14,39 +14,47 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.util.Map;
-
 import static com.flopcode.dotstar.android.Index.getConnectionPrefs;
 import static com.flopcode.dotstar.android.Index.getDotStar;
 
 @SuppressWarnings("unused")
 public class BoolParameter extends Parameter {
 
-  public BoolParameter(Map<String, String> params) {
-    super(params);
+  public BoolParameter(String presetName, String parameterName) {
+    super(presetName, parameterName);
   }
 
   @Override
-  public View createButton(LayoutInflater inflater, ViewGroup rootView, final Context context) {
+  public View createView(LayoutInflater inflater, ViewGroup rootView, final Context context) {
     final CheckBox res = (CheckBox) inflater.inflate(R.layout.preset_checkbox, rootView, false);
-    res.setText(name);
+    onCreate(new Listener() {
+      @Override
+      public void onChange(String name, String value) {
+        res.setChecked(Boolean.parseBoolean(value));
+      }
+    });
+    res.setText(getParameterName());
     res.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
-      public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        Call<Void> call = getDotStar(getConnectionPrefs(context)).set(ImmutableMap.of(name, "" + b));
+      public void onCheckedChanged(CompoundButton compoundButton, final boolean b) {
+        final String s = "" + b;
+        Call<Void> call = getDotStar(getConnectionPrefs(context)).set(ImmutableMap.of(getParameterName(), s));
         call.enqueue(new Callback<Void>() {
           @Override
           public void onResponse(Call<Void> call, Response<Void> response) {
-            Log.i(Index.LOG_TAG, "could set bool for '" + name + "'");
+            Log.i(Index.LOG_TAG, "could set bool for '" + getParameterName() + "'");
+            post(s);
           }
 
           @Override
           public void onFailure(Call<Void> call, Throwable t) {
-            Log.e(Index.LOG_TAG, "could not set bool for '" + name + "'", t);
+            Log.e(Index.LOG_TAG, "could not set bool for '" + getParameterName() + "'", t);
           }
         });
       }
     });
     return res;
   }
+
+
 }

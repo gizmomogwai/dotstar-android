@@ -140,6 +140,7 @@ public class Index extends AppCompatActivity {
       dotStar.index().enqueue(new Callback<List<Preset>>() {
         @Override
         public void onResponse(Call<List<Preset>> call, Response<List<Preset>> response) {
+          Application.PARAMETERS.set(response.body());
           adapter.set(response.body());
         }
 
@@ -208,7 +209,7 @@ public class Index extends AppCompatActivity {
 
           if (mTwoPane) {
             Bundle arguments = new Bundle();
-            arguments.putSerializable(PresetDetailFragment.ARG_ITEM_ID, holder.mItem);
+            arguments.putSerializable(PresetDetailFragment.PRESET_NAME, holder.mItem.name);
             PresetDetailFragment fragment = new PresetDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -217,7 +218,7 @@ public class Index extends AppCompatActivity {
           } else {
             Context context = holder.mContentView.getContext();
             Intent intent = new Intent(context, PresetDetailActivity.class);
-            intent.putExtra(PresetDetailFragment.ARG_ITEM_ID, holder.mItem);
+            intent.putExtra(PresetDetailFragment.PRESET_NAME, holder.mItem.name);
 
             context.startActivity(intent);
           }

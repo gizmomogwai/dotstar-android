@@ -30,18 +30,18 @@ public class PresetDetailActivity extends AppCompatActivity {
     final Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
     setSupportActionBar(toolbar);
 
-    final Preset preset = (Preset) getIntent().getSerializableExtra(PresetDetailFragment.ARG_ITEM_ID);
-    Call<Void> activate = Index.getDotStar(getConnectionPrefs(this)).activate(preset.name);
+    final String presetName = (String) getIntent().getSerializableExtra(PresetDetailFragment.PRESET_NAME);
+    Call<Void> activate = Index.getDotStar(getConnectionPrefs(this)).activate(presetName);
     activate.enqueue(new Callback<Void>() {
       @Override
       public void onResponse(Call<Void> call, Response<Void> response) {
-        Snackbar.make(toolbar.getRootView(), "Activated '" + preset.name + "'", Snackbar.LENGTH_LONG)
+        Snackbar.make(toolbar.getRootView(), "Activated '" + presetName + "'", Snackbar.LENGTH_LONG)
           .setAction("Action", null).show();
       }
 
       @Override
       public void onFailure(Call<Void> call, Throwable t) {
-        Snackbar.make(toolbar.getRootView(), "Failed activating '" + preset.name + "'", Snackbar.LENGTH_LONG)
+        Snackbar.make(toolbar.getRootView(), "Failed activating '" + presetName + "'", Snackbar.LENGTH_LONG)
           .setAction("Action", null).show();
 
       }
@@ -74,7 +74,7 @@ public class PresetDetailActivity extends AppCompatActivity {
       // Create the detail fragment and add it to the activity
       // using a fragment transaction.
       Bundle arguments = new Bundle();
-      arguments.putSerializable(PresetDetailFragment.ARG_ITEM_ID, preset);
+      arguments.putSerializable(PresetDetailFragment.PRESET_NAME, presetName);
       PresetDetailFragment fragment = new PresetDetailFragment();
       fragment.setArguments(arguments);
       getSupportFragmentManager().beginTransaction()
