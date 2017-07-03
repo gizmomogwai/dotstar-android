@@ -19,6 +19,8 @@ import retrofit2.Response;
 import static com.flopcode.dotstar.android.Index.getConnectionPrefs;
 import static com.flopcode.dotstar.android.Index.getDotStar;
 
+;
+
 @SuppressWarnings("unused")
 public class RangeParameter extends Parameter {
   public RangeParameter(String presetName, String parameterName) {
@@ -59,7 +61,7 @@ public class RangeParameter extends Parameter {
         float value = Float.parseFloat(getValue());
         SeekBar seekBar = new SeekBar(context);
         seekBar.setMax((int) ((max - min) * 10));
-        seekBar.setProgress((int)((value - min) * 10));
+        seekBar.setProgress((int) ((value - min) * 10));
         final AlertDialog alertDialog = new AlertDialog.Builder(context)
           .setTitle(calculateTitle())
           .setView(seekBar)
