@@ -1,10 +1,6 @@
+* DotStar 4 Android
+[[https://github.com/gizmomogwai/dotstar-android][https://img.shields.io/github/tag/gizmomogwai/dotstar-android.svg]]
+[[https://travis-ci.org/gizmomogwai/dotstar-android][https://img.shields.io/travis/gizmomogwai/dotstar-android.svg]]
+[[https://codecov.io/gh/gizmomogwai/dotstar-android][https://codecov.io/gh/gizmomogwai/dotstar-android/branch/master/graph/badge.svg]]
 
-* Todos
-** when implementing the parameters i came to the discovery that its not as easy as it seems.
-- first implementation was easy:
-initialize ui from parameters,
-whenever something could be sent to the server update ui and (optionally parameters)
-problem is, ui is gone, when the callback from the server comes back (so no way to get from fragment to ui element)
-- an own global eventbus, that stores the values could be used
-e.g. when starting up the parameters values are put to the eventbus
-when something has been changed, the eventbus is updated -> and notifies and updates the ui
+Android app to remove control a dotstar server.
