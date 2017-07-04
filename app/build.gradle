@@ -29,7 +29,8 @@ dependencies {
 
 // from http://stackoverflow.com/a/22597752
 def passwordFromKeychain = { name ->
-  return "security find-generic-password -s ${name} -a ${name} -w".execute().text.trim();
+  def pwd = System.env.passwd
+  return pwd ? pwd : "security find-generic-password -s ${name} -a ${name} -w".execute().text.trim();
 }
 
 import org.gradle.internal.logging.text.StyledTextOutput;
