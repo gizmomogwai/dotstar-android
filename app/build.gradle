@@ -5,10 +5,12 @@ buildscript {
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:2.3.3'
+    classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
   }
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.github.triplet.play'
 
 def butterknifeVersion = '8.3.0' // upgrading to 8.6.0 leads to a
 dependencies {
@@ -55,7 +57,7 @@ android {
   defaultConfig {
     minSdkVersion 21
     targetSdkVersion 21
-    versionCode 2
+    versionCode 3
     versionName gitVersion()
   }
 
@@ -78,7 +80,11 @@ android {
       keyPassword passwordFromKeychain("dotstar-play-store")
     }
   }
-
+  playAccountConfigs {
+    defaultAccountConfig {
+      jsonFile = file('./store/Google Play Android Developer-adb519ba6fad.json')
+    }
+  }
   buildTypes {
     release {
       signingConfig signingConfigs.release
@@ -92,9 +98,10 @@ android {
       resValue "string", "app_name", "DotStar-Debug"
     }
   }
-
+  defaultConfig {
+    playAccountConfig = playAccountConfigs.defaultAccountConfig
+  }
   lintOptions {
     abortOnError false
   }
-
 }

@@ -3,20 +3,27 @@ jdk: oraclejdk8
 sudo: false
 android:
   components:
-  - platform-tools
-  - tools
-  - build-tools-26.0.0
-  - android-23
-  - extra-android-m2repository
+    - platform-tools
+    - tools
+    - build-tools-26.0.0
+    - android-23
+    - extra-android-m2repository
 script: "./gradlew build"
 env:
   global:
-  - secure: ZCmJRHhdTERMAPaDximDWlCuBLz5okNmOjJocIVy7h/BkjAY7LMNQCTAYRcDEbpXS1rPevbBS7pclCjJJsCwunJRI28s0aLFJvl6au+x6K9cSx6KWsynMsYzyolwPQFKVb/kEPsjTFYHPit6I1dJd/iD8wMW/8RSHEljS62m4BdB0+qEdZ965FnC/8d559TknQ3vNYZsWCY1f6mBvof/pduYt7jh1TMqApDJ0vr7evLTlHUjtXOYxfvLSoV+RJKu80rgHdC70dBbfKqE4h/uxZdQXSQ+gn58CwmT+DWsEC/96V893Lz4mn4asn5DUISK852+qQXeBK0vGUsFA8mJw7u6mqv+R3ypaYWO5n93rqq6SjrkQ3kh+iEFJKZHfTOFHUSHFtxmLW573PPKQXnITzrsMmn0PeC0mNZBdlFw4B0Hkfxq2DsoLHo0wqpCurmJVdgw7TtuBD9ive1w6cl4VY80DeiaVvA3VvZo7YwHfq3pi0LzCttU5GwHKNgfVSBGxh8UAgRX8pbAoCJFHYqBrG+rZuhWMpQHeQ0GhpDbgnmasSdKMzJ9eUgXKR87U8AIl1J64jO6+N7RIWLS+cf3UNdFCatO+vSGcHdIZZKon0rh1av+o5p1t/JDcpuOfqxWxp0S7qT13ovgwifp+IR77fse4MBHeBm7YWTHIpi88uo=
+    - secure: ZCmJRHhdTERMAPaDximDWlCuBLz5okNmOjJocIVy7h/BkjAY7LMNQCTAYRcDEbpXS1rPevbBS7pclCjJJsCwunJRI28s0aLFJvl6au+x6K9cSx6KWsynMsYzyolwPQFKVb/kEPsjTFYHPit6I1dJd/iD8wMW/8RSHEljS62m4BdB0+qEdZ965FnC/8d559TknQ3vNYZsWCY1f6mBvof/pduYt7jh1TMqApDJ0vr7evLTlHUjtXOYxfvLSoV+RJKu80rgHdC70dBbfKqE4h/uxZdQXSQ+gn58CwmT+DWsEC/96V893Lz4mn4asn5DUISK852+qQXeBK0vGUsFA8mJw7u6mqv+R3ypaYWO5n93rqq6SjrkQ3kh+iEFJKZHfTOFHUSHFtxmLW573PPKQXnITzrsMmn0PeC0mNZBdlFw4B0Hkfxq2DsoLHo0wqpCurmJVdgw7TtuBD9ive1w6cl4VY80DeiaVvA3VvZo7YwHfq3pi0LzCttU5GwHKNgfVSBGxh8UAgRX8pbAoCJFHYqBrG+rZuhWMpQHeQ0GhpDbgnmasSdKMzJ9eUgXKR87U8AIl1J64jO6+N7RIWLS+cf3UNdFCatO+vSGcHdIZZKon0rh1av+o5p1t/JDcpuOfqxWxp0S7qT13ovgwifp+IR77fse4MBHeBm7YWTHIpi88uo=
 deploy:
-  provider: releases
-  file: "./app/build/outputs/apk/app-release.apk"
-  skip_cleanup: true
-  on:
-    tags: true
-  api_key:
-    secure: Q3i2IK6fWv8+dZdVOutur3kLFJpTXHIj8pZvBlsrYQMRbu3y57j3+ntcIJcsbLQcRo/qcMETGh2OQ9XPJR7sRpFUQ4qHEETzkRTM6WN0EWp3h0NUzVD37R/MS8memAzmB5xNVXcU31uFMIyyjmS8lsY3OmnnHjorrBkbx+p10jfmq9F//LH4wI3rzbqA9fGPWy/3yU/Hl/b9Pip52TWO6hW5ybEf/JoeaHDsAXSePtSlSzRdn4t07PzjYSBbREPT5F5d5M7Dn4R+39+42oZRilYkZslawEgYzhQNnJK5tDyPTPeYqILQUTpCGX1ChPdD0VkzowLyXATk2xM1c/5pUjb8UCF/GbrYjkhfSW6Oxc4XQ74FdIOd9RaPcvDzrFxVapsYofiQiQb+/ZJIbOecpWEdPVlHPluyPwJYhYhSvZk7Zb/isvmscBpb4Ha4JEiRvfhcHyz3R6GdJL+wUdqGC8W5uderuJCUi3Pq/iHBYkkHUwiq457NTCR64tE4oyllr9iyjy/GmJIq/C8eWaGlvBrxQHVVy1qgJ0XsJWicOl82HVeIJXLt3x+EsGXwlFAa3Wt0N1nrMN8u+lzhFIIazsUkofQhGEYULMINSglqyPNQTt2h4w8KYT242KhOoUkeNQ5Ky1TqYymYOB0bjqw3XoROw/cK6wEbhQMmmYLUrLk=
+  - provider: releases
+    file: "./app/build/outputs/apk/app-release.apk"
+    skip_cleanup: true
+    on:
+      tags: true
+    api_key:
+      secure: Q3i2IK6fWv8+dZdVOutur3kLFJpTXHIj8pZvBlsrYQMRbu3y57j3+ntcIJcsbLQcRo/qcMETGh2OQ9XPJR7sRpFUQ4qHEETzkRTM6WN0EWp3h0NUzVD37R/MS8memAzmB5xNVXcU31uFMIyyjmS8lsY3OmnnHjorrBkbx+p10jfmq9F//LH4wI3rzbqA9fGPWy/3yU/Hl/b9Pip52TWO6hW5ybEf/JoeaHDsAXSePtSlSzRdn4t07PzjYSBbREPT5F5d5M7Dn4R+39+42oZRilYkZslawEgYzhQNnJK5tDyPTPeYqILQUTpCGX1ChPdD0VkzowLyXATk2xM1c/5pUjb8UCF/GbrYjkhfSW6Oxc4XQ74FdIOd9RaPcvDzrFxVapsYofiQiQb+/ZJIbOecpWEdPVlHPluyPwJYhYhSvZk7Zb/isvmscBpb4Ha4JEiRvfhcHyz3R6GdJL+wUdqGC8W5uderuJCUi3Pq/iHBYkkHUwiq457NTCR64tE4oyllr9iyjy/GmJIq/C8eWaGlvBrxQHVVy1qgJ0XsJWicOl82HVeIJXLt3x+EsGXwlFAa3Wt0N1nrMN8u+lzhFIIazsUkofQhGEYULMINSglqyPNQTt2h4w8KYT242KhOoUkeNQ5Ky1TqYymYOB0bjqw3XoROw/cK6wEbhQMmmYLUrLk=
+  - provider: script
+    script: "./gradlew publishRelease"
+    skip_cleanup: true
+    on:
+      tags: true
+before_install:
+  - openssl aes-256-cbc -K $encrypted_a81fdc9bd831_key -iv $encrypted_a81fdc9bd831_iv -in app/store/Google\ Play\ Android\ Developer-adb519ba6fad.json.enc -out app/store/Google\ Play\ Android\ Developer-adb519ba6fad.json -d
