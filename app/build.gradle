@@ -9,19 +9,19 @@ buildscript {
   }
 }
 
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.github.triplet.play'
 
-def butterknifeVersion = '8.3.0' // upgrading to 8.6.0 leads to a
+def butterknifeVersion = '8.8.1' // '8.3.0' // upgrading leads to a cannot merge dex error
+def supportLibVersion = '27.0.2'
 dependencies {
-  compile 'com.android.support:appcompat-v7:23.2.1'
-  compile 'com.android.support:design:23.2.1'
-  compile 'com.android.support:cardview-v7:23.2.1'
-  compile 'com.android.support:recyclerview-v7:23.2.1'
+  compile "com.android.support:appcompat-v7:$supportLibVersion"
+  compile "com.android.support:design:$supportLibVersion"
+  compile "com.android.support:cardview-v7:$supportLibVersion"
+  compile "com.android.support:recyclerview-v7:$supportLibVersion"
 
   compile 'com.github.QuadFlask:colorpicker:0.0.11'
-  compile 'com.google.guava:guava:22.0-android' // should not be needed its already in lib
-  compile 'com.squareup.retrofit2:retrofit:2.1.0' // should not be needed its already in lib
 
   compile "com.jakewharton:butterknife:$butterknifeVersion"
   annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
@@ -38,6 +38,7 @@ def passwordFromKeychain = { name ->
 import org.gradle.internal.logging.text.StyledTextOutput;
 import org.gradle.internal.logging.text.StyledTextOutputFactory;
 import org.gradle.internal.logging.text.StyledTextOutput.Style
+
 def gitVersion = {
   def version = "git describe --dirty".execute().text.trim();
   if (version.indexOf('dirty') != -1) {
@@ -51,11 +52,11 @@ def gitVersion = {
 }
 
 android {
-  compileSdkVersion 23
+  compileSdkVersion 27
 
   defaultConfig {
     minSdkVersion 21
-    targetSdkVersion 21
+    targetSdkVersion 27
     versionCode 4
     versionName gitVersion()
   }
